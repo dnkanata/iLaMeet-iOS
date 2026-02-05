@@ -1,4 +1,4 @@
-{
+﻿{
   "expo": {
     "name": "iLaMeet",
     "slug": "ilameet",
@@ -11,19 +11,14 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.ilameet.app",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "iLaMeet needs your location for meeting attendance",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "iLaMeet needs your location for attendance tracking",
-        "UIBackgroundModes": [
-          "location",
-          "location"
-        ],
+        "UIBackgroundModes": ["location"],
         "ITSAppUsesNonExemptEncryption": false
       }
     },

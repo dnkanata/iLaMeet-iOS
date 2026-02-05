@@ -6,20 +6,16 @@ on:
 
 jobs:
   build-ios:
-    runs-on: ubuntu-latest  # Changed to ubuntu (faster, cheaper)
+    runs-on: ubuntu-latest
     
     steps:
     - uses: actions/checkout@v4
-    
     - uses: actions/setup-node@v4
       with:
-        node-version: '20'
-        cache: ''  # DISABLED CACHE - important!
-    
-    - name: Install EAS CLI
-      run: npm install -g eas-cli
-    
-    - name: Build iOS with EAS
-      run: eas build --platform ios --non-interactive --profile preview
+        node-version: "20"
+    - run: npm install --legacy-peer-deps --force
+    - run: npx expo install --fix
+    - run: npm install -g eas-cli
+    - run: eas build --platform ios --non-interactive
       env:
         EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
