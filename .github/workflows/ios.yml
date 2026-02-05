@@ -15,42 +15,28 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
     
-    - name: Setup Node.js 20
+    - name: Setup Node.js 20.19.4
       uses: actions/setup-node@v4
       with:
-        node-version: '20.19.4'  # EXACT VERSION NEEDED
+        node-version: '20.19.4'  # EXACT VERSION REQUIRED
         cache: 'npm'
     
     - name: Verify Node.js version
       run: node --version
     
-    - name: Create .npmrc with engine override
-      run: |
-        echo "engine-strict=false" > .npmrc
-        echo "legacy-peer-deps=true" >> .npmrc
-        echo "strict-peer-dependencies=false" >> .npmrc
-    
-    - name: Clean install with exact versions
+    - name: Install dependencies with legacy peer deps
       run: |
         # Remove existing modules
         rm -rf node_modules package-lock.json
         
-        # Install core packages first
-        npm install --engine-strict=false --legacy-peer-deps --force
+        # Set npm config to use legacy peer deps
+        npm config set legacy-peer-deps true
         
-        # Install specific required packages
-        npx expo install react@19.1.0 react-native@0.81.5
-        npx expo install @react-native-async-storage/async-storage@2.2.0
-        npx expo install expo-application@~7.0.8
-        npx expo install expo-constants@~18.0.13
-        npx expo install expo-dev-client@~6.0.20
-        npx expo install expo-device@~8.0.10
-        npx expo install expo-file-system@~19.0.21
-        npx expo install expo-font@~14.0.11
-        npx expo install expo-keep-awake@~15.0.8
-        npx expo install expo-location@~19.0.8
-        npx expo install expo-splash-screen@~31.0.13
-        npx expo install expo-status-bar@~1.12.1
+        # Install dependencies
+        npm install --legacy-peer-deps --force
+        
+        # Install required Expo packages
+        npx expo install --fix
     
     - name: Install EAS CLI
       run: npm install -g eas-cli@latest
