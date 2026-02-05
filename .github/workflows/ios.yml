@@ -1,0 +1,37 @@
+﻿name: Build iOS with EAS
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  build-ios:
+    runs-on: macos-latest  # Free macOS runners!
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: npm
+        
+    - name: Install dependencies
+      run: |
+        npm ci
+        npx expo install --fix
+        
+    - name: Install EAS CLI
+      run: npm install -g eas-cli
+      
+    - name: Build iOS (Simulator)
+      env:
+        EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      run: |
+        eas login --token $EXPO_TOKEN
+        eas build --platform ios --profile preview --non-interactive
