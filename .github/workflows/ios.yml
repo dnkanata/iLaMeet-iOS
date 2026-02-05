@@ -9,25 +9,46 @@ on:
 
 jobs:
   build-ios:
-    runs-on: macos-latest  # Free macOS runners!
+    runs-on: macos-latest
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
       
-    - name: Setup Node.js
+    - name: Setup Node.js 20
       uses: actions/setup-node@v3
       with:
-        node-version: 18
+        node-version: 20  # CHANGED FROM 18 TO 20
         cache: npm
         
-    - name: Install dependencies
+    - name: Setup .npmrc for legacy peer deps
       run: |
-        npm ci
-        npx expo install --fix
+        echo "legacy-peer-deps=true" > .npmrc
+        echo "engine-strict=false" >> .npmrc
+        
+    - name: Install dependencies with legacy peer deps
+      run: |
+        # Clean any existing modules
+        rm -rf node_modules package-lock.json
+        
+        # Install with legacy peer deps
+        npm install --legacy-peer-deps --force
+        
+        # Install missing Expo packages
+        npx expo install expo-application@~7.0.8 \
+          expo-constants@~18.0.13 \
+          expo-dev-client@~6.0.20 \
+          expo-device@~8.0.10 \
+          expo-file-system@~19.0.21 \
+          expo-font@~14.0.11 \
+          expo-keep-awake@~15.0.8 \
+          expo-location@~19.0.8 \
+          expo-splash-screen@~31.0.13 \
+          expo-status-bar@~1.12.1 \
+          @react-native-async-storage/async-storage@2.2.0
         
     - name: Install EAS CLI
-      run: npm install -g eas-cli
+      run: npm install -g eas-cli@latest
       
     - name: Build iOS (Simulator)
       env:
