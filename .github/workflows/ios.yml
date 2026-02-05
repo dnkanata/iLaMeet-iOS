@@ -3,45 +3,23 @@
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
-  workflow_dispatch:
 
 jobs:
   build-ios:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest  # Changed to ubuntu (faster, cheaper)
     
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
     
-    - name: Setup Node.js 20.19.4
-      uses: actions/setup-node@v4
+    - uses: actions/setup-node@v4
       with:
-        node-version: '20.19.4'
-        cache: 'npm'
-    
-    - name: Verify Node.js version
-      run: node --version
-    
-    - name: Create lock file if missing
-      run: |
-        if [ ! -f package-lock.json ]; then
-          echo "Creating package-lock.json..."
-          echo "{}" > package-lock.json
-        fi
-    
-    - name: Install dependencies
-      run: |
-        npm config set legacy-peer-deps true
-        npm install --legacy-peer-deps --force --no-audit
+        node-version: '20'
+        cache: ''  # DISABLED CACHE - important!
     
     - name: Install EAS CLI
-      run: npm install -g eas-cli@latest
+      run: npm install -g eas-cli
     
-    - name: Build iOS (Simulator)
+    - name: Build iOS with EAS
+      run: eas build --platform ios --non-interactive --profile preview
       env:
         EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-      run: |
-        eas login --token $EXPO_TOKEN
-        eas build --platform ios --profile preview --non-interactive
