@@ -18,25 +18,23 @@ jobs:
     - name: Setup Node.js 20.19.4
       uses: actions/setup-node@v4
       with:
-        node-version: '20.19.4'  # EXACT VERSION REQUIRED
+        node-version: '20.19.4'
         cache: 'npm'
     
     - name: Verify Node.js version
       run: node --version
     
-    - name: Install dependencies with legacy peer deps
+    - name: Create lock file if missing
       run: |
-        # Remove existing modules
-        rm -rf node_modules package-lock.json
-        
-        # Set npm config to use legacy peer deps
+        if [ ! -f package-lock.json ]; then
+          echo "Creating package-lock.json..."
+          echo "{}" > package-lock.json
+        fi
+    
+    - name: Install dependencies
+      run: |
         npm config set legacy-peer-deps true
-        
-        # Install dependencies
-        npm install --legacy-peer-deps --force
-        
-        # Install required Expo packages
-        npx expo install --fix
+        npm install --legacy-peer-deps --force --no-audit
     
     - name: Install EAS CLI
       run: npm install -g eas-cli@latest
