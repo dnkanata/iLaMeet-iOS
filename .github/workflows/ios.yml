@@ -13,8 +13,10 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: "20"
-    - run: find . -type f \( -name "*.json" -o -name "*.js" -o -name "*.yml" -o -name "*.yaml" \) -exec sed -i "1s/^\xEF\xBB\xBF//" {} \;
+    - run: find . -type f \( -name "*.json" -o -name "*.js" -o -name "*.ts" -o -name "*.tsx" -o -name "*.yml" -o -name "*.yaml" \) -exec sed -i "1s/^\xEF\xBB\xBF//" {} \;
+    - run: npm install @expo/cli --no-save
     - run: npm install --legacy-peer-deps --force
+    - run: npx expo install @react-navigation/native @react-navigation/native-stack react-native-screens react-native-safe-area-context
     - run: npm install -g eas-cli
     - run: eas build --platform ios --profile simulator --non-interactive
       env:
