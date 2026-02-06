@@ -1,0 +1,4 @@
+# Commit and push
+git add .github/workflows/ios.yml
+git commit -m "FIX: Install expo-cli globally before using expo command"
+git push origin main
