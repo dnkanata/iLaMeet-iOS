@@ -14,12 +14,11 @@ jobs:
       with:
         node-version: "20"
     - run: find . -type f \( -name "*.json" -o -name "*.js" -o -name "*.yml" -o -name "*.yaml" \) -exec sed -i "1s/^\xEF\xBB\xBF//" {} \;
-    - run: |
-        if [ -f "index.js" ] && [ -f "expo/AppEntry.js" ]; then
-          rm -f index.js
-        fi
     - run: npm install --legacy-peer-deps --force
     - run: npm install -g eas-cli
-    - run: eas build --platform ios --non-interactive
+    - run: eas credentials --platform ios --non-interactive
+      env:
+        EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+    - run: eas build --platform ios --profile preview --non-interactive
       env:
         EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}

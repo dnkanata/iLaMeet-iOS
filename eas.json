@@ -1,6 +1,7 @@
 ﻿{
   "cli": {
-    "version": ">= 3.0.0"
+    "version": ">= 3.0.0",
+    "appVersionSource": "remote"
   },
   "build": {
     "development": {
@@ -13,17 +14,8 @@
     "preview": {
       "distribution": "internal",
       "ios": {
-        "simulator": true,
-        "cocoapods": "1.15.2"
-      }
-    },
-    "production": {
-      "ios": {
-        "autoIncrement": true
+        "simulator": true
       }
     }
-  },
-  "submit": {
-    "production": {}
   }
 }
