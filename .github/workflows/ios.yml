@@ -13,8 +13,9 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: "20"
+    - run: npm install -g expo-cli
     - run: npm install --legacy-peer-deps --force
-    - run: npx expo install --fix
+    - run: expo install --fix
     - run: npm install -g eas-cli
     - run: eas build --platform ios --non-interactive
       env:
